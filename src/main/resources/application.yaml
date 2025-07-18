@@ -1,0 +1,35 @@
+spring:
+  application:
+    name:
+      salvafood
+  datasource:
+        url:
+          ${DB_URL}
+        username:
+          ${DB_USER}
+        password:
+          ${DB_PASSWORD}
+        driver-class-name: ${DRIVER}
+  jpa:
+    hibernate:
+      ddl-auto:
+        update
+    show-sql:
+      true
+    properties:
+      hibernate:
+        dialect: ${DIALECT}
+
+server:
+  port:
+    ${PORT}
+
+jwt:
+  secret:
+    ${JWT_SECRET}
+  expiration:
+    ${JWT_EXPIRATION}
+
+app:
+  upload:
+    dir: ${APP_UPLOAD_DIR:./product-salvafood}
