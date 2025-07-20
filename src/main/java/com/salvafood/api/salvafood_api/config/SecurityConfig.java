@@ -35,8 +35,7 @@ public class SecurityConfig {
                 // --- A. ENDPOINTS PÚBLICOS (No requieren autenticación) ---
                 .requestMatchers(
                         "/swagger-ui/**",
-                        "/v3/api-docs*/**",
-                        "/ws/lights" // El WebSocket es público
+                        "/v3/api-docs*/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST,
                         "/user/register", // Permitir que cualquiera cree una cuenta de usuario.
@@ -52,7 +51,7 @@ public class SecurityConfig {
                 // --- C. ENDPOINTS DE VENDEDOR (Requieren rol 'SELLER') ---
                 .requestMatchers(
                         "/product/**" // Permitir que los vendedores gestionen productos.
-                ).hasRole("SELLER")
+                ).hasAnyRole("SELLER","ADMIN") // Los administradores también pueden gestionar productos.
                 // --- D. CUALQUIER OTRA PETICIÓN (Requiere autenticación) ---
 
                 .anyRequest().authenticated()
