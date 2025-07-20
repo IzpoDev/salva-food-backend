@@ -23,6 +23,7 @@ spring:
 server:
   port:
     ${PORT}
+  address: ${HOST}
 
 jwt:
   secret:
@@ -32,4 +33,4 @@ jwt:
 
 app:
   upload:
-    dir: ${APP_UPLOAD_DIR:./product-salvafood}
+    dir: ${APP_UPLOAD_DIR}

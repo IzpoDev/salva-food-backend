@@ -126,12 +126,13 @@ public class UserServiceImpl implements UserService {
                         .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado o inactivo"));
 
                 String token = jwtUtil.generateToken(userEntity.getEmail(), userEntity.getRole().getName());
-                return new LoginResponseDto(token,"Haz iniciado sesion correctamen", UserMapper.toDto(userEntity));
+                return new LoginResponseDto(token, "Has iniciado sesión correctamente", UserMapper.toDto(userEntity));
             } else {
-                throw new BadRequestException("Las credenciales son incorrectas o el usuario no está activo.");
+                throw new RuntimeException("Las credenciales son incorrectas o el usuario no está activo");
             }
         } catch (Exception e) {
-            return new LoginResponseDto("token no generado","Error durante la autenticación: " + e.getMessage(), null);
+            // Lanzar excepción en lugar de retornar error
+            throw new RuntimeException("Error durante la autenticación: " + e.getMessage());
         }
     }
 
