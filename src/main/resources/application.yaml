@@ -10,6 +10,8 @@ spring:
         password:
           ${DB_PASSWORD}
         driver-class-name: ${DRIVER}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
   jpa:
     hibernate:
       ddl-auto:
@@ -24,6 +26,13 @@ server:
   port:
     ${PORT}
   address: ${HOST}
+# aws
+#aws:
+#  s3:
+#    bucket-name: ${AWS_S3_BUCKET_NAME}
+#    region: ${AWS_S3_REGION}
+#    access-key: ${AWS_ACCESS_KEY_ID}
+#    secret-key: ${AWS_SECRET_ACCESS_KEY}
 
 jwt:
   secret:
@@ -31,6 +40,38 @@ jwt:
   expiration:
     ${JWT_EXPIRATION}
 
+# Configuración común
 app:
   upload:
+    max-file-size: 100mb
+
+---
+# Perfil local
+spring:
+  config:
+    activate:
+      on-profile: local
+
+app:
+  image:
+    storage: local
+  upload:
     dir: ${APP_UPLOAD_DIR}
+
+---
+# Perfil producción
+spring:
+  config:
+    activate:
+      on-profile: production
+
+app:
+  image:
+    storage: s3
+
+aws:
+  s3:
+    bucket-name: ${AWS_S3_BUCKET_NAME}
+    region: ${AWS_S3_REGION}
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}

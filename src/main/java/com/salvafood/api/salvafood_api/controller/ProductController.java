@@ -2,8 +2,8 @@ package com.salvafood.api.salvafood_api.controller;
 
 import com.salvafood.api.salvafood_api.model.dto.ProductRequestDto;
 import com.salvafood.api.salvafood_api.model.dto.ProductResponseDto;
+import com.salvafood.api.salvafood_api.service.ImageStorageService;
 import com.salvafood.api.salvafood_api.service.ProductService;
-import com.salvafood.api.salvafood_api.service.impl.ImageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final ImageService imageService;
+    private final ImageStorageService imageStorageService; // Cambiar solo esta línea
 
     @PostMapping
     public ResponseEntity<ProductResponseDto> createProduct(@Valid @RequestBody ProductRequestDto productDto) {
@@ -36,6 +36,14 @@ public class ProductController {
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
         ProductResponseDto product = productService.getProductById(id);
         return ResponseEntity.ok(product);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductResponseDto>> getAllProductsSimple(
+            @RequestParam(defaultValue = "false") boolean activeOnly) {
+        List<ProductResponseDto> products = activeOnly
+                ? productService.getAllActiveProductsSimple()
+                : productService.getAllProductsSimple();
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping
@@ -96,7 +104,7 @@ public class ProductController {
             @PathVariable Long id,
             @RequestParam("images") MultipartFile file) {
         try {
-            String imageUrl = imageService.saveImage(file, id);
+            String imageUrl = imageStorageService.saveImage(file, id); // Usar interfaz
             productService.addImageToProduct(id, imageUrl);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
@@ -111,7 +119,7 @@ public class ProductController {
             @RequestParam String imageUrl) {
         try {
             productService.removeImageFromProduct(id, imageUrl);
-            imageService.deleteImage(imageUrl);
+            imageStorageService.deleteImage(imageUrl); // Usar interfaz
             return ResponseEntity.noContent().build();
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -49,8 +49,8 @@ public class SecurityConfig {
                         "/user/create-admin"  // Permitir que solo los administradores creen otros administradores.
                 ).hasRole("ADMIN")
                 // --- C. ENDPOINTS DE VENDEDOR (Requieren rol 'SELLER') ---
-                .requestMatchers(
-                        "/product/**" // Permitir que los vendedores gestionen productos.
+                .requestMatchers(HttpMethod.POST,
+                        "/product/**" // Permitir que solo los vendedores registren productos.
                 ).hasAnyRole("SELLER","ADMIN") // Los administradores también pueden gestionar productos.
                 // --- D. CUALQUIER OTRA PETICIÓN (Requiere autenticación) ---
 

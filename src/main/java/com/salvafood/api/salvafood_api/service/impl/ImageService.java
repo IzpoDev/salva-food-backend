@@ -1,6 +1,8 @@
 package com.salvafood.api.salvafood_api.service.impl;
 
+import com.salvafood.api.salvafood_api.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,11 +13,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class ImageService {
+@ConditionalOnProperty(name = "app.image.storage", havingValue = "local", matchIfMissing = true)
+public class ImageService implements ImageStorageService {
 
     @Value("${app.upload.dir}")
     private String uploadDir;
 
+    @Override
     public String saveImage(MultipartFile file, Long productId) throws IOException {
         // Validar que el archivo no esté vacío
         if (file.isEmpty()) {
@@ -47,6 +51,7 @@ public class ImageService {
         return "/images/" + filename; // URL relativa
     }
 
+    @Override
     public void deleteImage(String imageUrl) throws IOException {
         if (imageUrl != null && imageUrl.startsWith("/images/")) {
             String filename = imageUrl.substring(8); // Remover "/images/"

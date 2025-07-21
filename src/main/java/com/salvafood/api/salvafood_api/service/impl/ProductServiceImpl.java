@@ -19,9 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class ProductServiceImpl implements ProductService {
-
     private final ProductRepository productRepository;
-
 
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productDto) {
@@ -38,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
         return ProductMapper.toResponseDto(product);
     }
 
+    // Métodos paginados existentes
     @Override
     @Transactional(readOnly = true)
     public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
@@ -57,6 +56,34 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductResponseDto> searchProductsByName(String name, Pageable pageable) {
         return productRepository.findByNameContainingIgnoreCase(name, pageable)
                 .map(ProductMapper::toResponseDto);
+    }
+
+    // Nuevos métodos simples
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductResponseDto> getAllProductsSimple() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductMapper::toResponseDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductResponseDto> getAllActiveProductsSimple() {
+        return productRepository.findByActiveTrue()
+                .stream()
+                .map(ProductMapper::toResponseDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductResponseDto> searchProductsByNameSimple(String name) {
+        return productRepository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(ProductMapper::toResponseDto)
+                .toList();
     }
 
     @Override

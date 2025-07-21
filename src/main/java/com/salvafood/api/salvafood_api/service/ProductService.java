@@ -10,9 +10,17 @@ import java.util.List;
 public interface ProductService {
     ProductResponseDto createProduct(ProductRequestDto productDto);
     ProductResponseDto getProductById(Long id);
+
+    // Métodos paginados
     Page<ProductResponseDto> getAllProducts(Pageable pageable);
     Page<ProductResponseDto> getActiveProducts(Pageable pageable);
     Page<ProductResponseDto> searchProductsByName(String name, Pageable pageable);
+
+    // Métodos simples para el frontend
+    List<ProductResponseDto> getAllProductsSimple();
+    List<ProductResponseDto> getAllActiveProductsSimple();
+    List<ProductResponseDto> searchProductsByNameSimple(String name);
+
     List<ProductResponseDto> getProductsNearExpiration(int days);
     ProductResponseDto updateProduct(Long id, ProductRequestDto productDto);
     void deleteProduct(Long id);
