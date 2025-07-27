@@ -1,9 +1,6 @@
 package com.salvafood.api.salvafood_api.service;
 
-import com.salvafood.api.salvafood_api.model.dto.LoginResponseDto;
-import com.salvafood.api.salvafood_api.model.dto.LoginRequestDto;
-import com.salvafood.api.salvafood_api.model.dto.UserRequestDto;
-import com.salvafood.api.salvafood_api.model.dto.UserResponseDto;
+import com.salvafood.api.salvafood_api.model.dto.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +13,9 @@ public interface UserService {
     public List<UserResponseDto> getAllUsers();
     public UserResponseDto getUserById(Long id);
     public void deleteUserById(Long id);
+
+    public String startForgotPassword(String email);
+    public String resetPassword(ResetPasswordDto resetPasswordRequestDto);
 
     //Funciones de autenticacion
     public LoginResponseDto authUser(LoginRequestDto loginRequestDto);

@@ -39,7 +39,11 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST,
                         "/user/register", // Permitir que cualquiera cree una cuenta de usuario.
-                        "/user/login"    // Permitir que cualquiera intente autenticarse.
+                        "/user/login",   // Permitir que cualquiera intente autenticarse.
+                        "/user/start-reset-password/{email}" // Permitir que cualquiera inicie el proceso de restablecimiento de contraseña.
+                ).permitAll()
+                .requestMatchers(HttpMethod.PUT,
+                       "/user/reset-password" // Permitir que cualquiera restablezca su contraseña.
                 ).permitAll()
 
                 // --- B. ENDPOINTS DE ADMINISTRADOR (Requieren rol 'ADMIN') ---

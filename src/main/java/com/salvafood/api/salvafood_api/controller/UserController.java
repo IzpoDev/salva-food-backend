@@ -1,9 +1,6 @@
 package com.salvafood.api.salvafood_api.controller;
 
-import com.salvafood.api.salvafood_api.model.dto.LoginRequestDto;
-import com.salvafood.api.salvafood_api.model.dto.LoginResponseDto;
-import com.salvafood.api.salvafood_api.model.dto.UserRequestDto;
-import com.salvafood.api.salvafood_api.model.dto.UserResponseDto;
+import com.salvafood.api.salvafood_api.model.dto.*;
 import com.salvafood.api.salvafood_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +57,18 @@ public class UserController {
     public ResponseEntity<UserResponseDto> createAdminUser(@RequestBody @Valid UserRequestDto userRequest) {
         UserResponseDto createdUser = userService.createUser(userRequest);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    //Endpoints for password reset
+    @PostMapping("/start-reset-password/{email}")
+    public ResponseEntity<String> startResetPassword(@PathVariable("email") String email) {
+        String response = userService.startForgotPassword(email);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetPasswordDto resetPasswordRequest) {
+        String response = userService.resetPassword(resetPasswordRequest);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("SELECT u FROM UserEntity u WHERE u.email =:email")
-    UserEntity findByEmail(@Param("email") String email);
+    Optional<UserEntity> findByEmail(@Param("email") String email);
     @Query("SELECT u FROM UserEntity u WHERE u.phoneNumber =:phone")
     UserEntity findByPhoneNumber(@Param("phone") String phoneNumber);
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM UserEntity u WHERE u.email =:email")
