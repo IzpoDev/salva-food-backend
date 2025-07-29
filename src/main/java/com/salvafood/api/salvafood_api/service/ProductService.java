@@ -4,7 +4,9 @@ import com.salvafood.api.salvafood_api.model.dto.ProductRequestDto;
 import com.salvafood.api.salvafood_api.model.dto.ProductResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProductService {
@@ -24,7 +26,7 @@ public interface ProductService {
     List<ProductResponseDto> getProductsNearExpiration(int days);
     ProductResponseDto updateProduct(Long id, ProductRequestDto productDto);
     void deleteProduct(Long id);
-    String addImageToProduct(Long productId, String imageUrl);
+    String addImageToProduct(Long productId, MultipartFile image) throws IOException;
     void removeImageFromProduct(Long productId, String imageUrl);
     void setMainImage(Long productId, String imageUrl);
 }

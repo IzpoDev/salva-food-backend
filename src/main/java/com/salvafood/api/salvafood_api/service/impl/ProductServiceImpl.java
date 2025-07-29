@@ -5,13 +5,16 @@ import com.salvafood.api.salvafood_api.model.dto.ProductRequestDto;
 import com.salvafood.api.salvafood_api.model.dto.ProductResponseDto;
 import com.salvafood.api.salvafood_api.model.entity.ProductEntity;
 import com.salvafood.api.salvafood_api.repository.ProductRepository;
+import com.salvafood.api.salvafood_api.service.ImageStorageService;
 import com.salvafood.api.salvafood_api.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import java.util.List;
 @Transactional
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final ImageStorageService imageStorageService; // Cambiar solo esta línea
 
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productDto) {
@@ -115,7 +119,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String addImageToProduct(Long productId, String imageUrl) {
+    public String addImageToProduct(Long productId, MultipartFile file) throws IOException {
+        try {
+            if (file.isEmpty()) {
+                throw new IOException("El archivo está vacío");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar el archivo: " + e.getMessage());
+        }
+        String imageUrl = imageStorageService.saveImage(file, productId);
         ProductEntity product = productRepository.findByIdAndActiveTrue(productId)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + productId));
 

@@ -25,6 +25,7 @@ public class UserMapper {
         userResponseDto.setEmail(userEntity.getEmail());
         userResponseDto.setPhoneNumber(userEntity.getPhoneNumber());
         userResponseDto.setRoleName(userEntity.getRole().getName());
+        userResponseDto.setSalvaCoin(userEntity.getSalvaCoin());
         return userResponseDto;
     }
     public static List<UserResponseDto> toListDto(List<UserEntity> userEntities) {

@@ -104,12 +104,10 @@ public class ProductController {
             @PathVariable Long id,
             @RequestParam("images") MultipartFile file) {
         try {
-            String imageUrl = imageStorageService.saveImage(file, id); // Usar interfaz
-            productService.addImageToProduct(id, imageUrl);
-            return ResponseEntity.ok(imageUrl);
+            String imageUrl = productService.addImageToProduct(id, file);
+            return new ResponseEntity<>(imageUrl, HttpStatus.OK);
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al subir imagen: " + e.getMessage());
+            return new ResponseEntity<>("Error al subir el archivo",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
